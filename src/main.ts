@@ -1,13 +1,26 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createI18n } from 'vue-i18n'
 
+import i18nMessages from '@/locales';
 import App from './App.vue'
 import router from './router'
 
 import 'virtual:windi.css';
+import { useNavigatorLanguage } from '@vueuse/core';
+
+const i18n = createI18n({
+	locale: useNavigatorLanguage().language.value,
+	fallbackLocale: 'en',
+	legacy: false,
+	globalInjection: true,
+	messages: i18nMessages
+})
+
 
 const app = createApp(App)
 
+app.use(i18n);
 app.use(createPinia())
 app.use(router)
 

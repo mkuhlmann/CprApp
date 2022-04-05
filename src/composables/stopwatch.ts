@@ -1,7 +1,7 @@
 import { useInterval } from '@vueuse/core';
 import { computed, ref, type Ref } from 'vue';
 
-const computedTime = function (elapsed: Ref<number>) {
+const computedTime = function (elapsed: Ref<number>, showHours: boolean = false) {
 	const hours = computed(() => Math.floor(elapsed.value / 1000 / 3600));
 	const minutes = computed(() => Math.floor(elapsed.value / 1000 / 60 % 60));	
 	const seconds = computed(() => Math.floor(elapsed.value / 1000 % 60));
@@ -10,7 +10,7 @@ const computedTime = function (elapsed: Ref<number>) {
 		const h = hours.value.toString().padStart(2, '0');
 		const m = minutes.value.toString().padStart(2, '0');
 		const s = seconds.value.toString().padStart(2, '0');
-		return `${h}:${m}:${s}`;
+		return (showHours) ? `${h}:${m}:${s}` : `${m}:${s}`;
 	});
 
 	return {
@@ -21,17 +21,20 @@ const computedTime = function (elapsed: Ref<number>) {
 	};
 }
 
-export const useStopwatch = function (precision: number = 1000) {
+export const useStopwatch = function (precision: number = 1000, showHours: boolean = false) {
 	let elapsed = ref(0);
+	let running = ref(false);
 	let interval: number;
 
 	const start = () => {
+		running.value = true;
 		interval = setInterval(() => {
 			elapsed.value += precision;
-		}, 10);//precision);	
+		}, precision);	
 	};
 
 	const pause = () => {
+		running.value = false;
 		clearInterval(interval);
 	};
 
@@ -40,10 +43,11 @@ export const useStopwatch = function (precision: number = 1000) {
 	};
 
 	return {
+		running,
 		start,
 		pause,
 		reset,
 		elapsed,
-		...computedTime(elapsed)
+		...computedTime(elapsed, showHours)
 	}
 };

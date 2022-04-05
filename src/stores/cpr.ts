@@ -6,6 +6,7 @@ export const useCprStore = defineStore({
 	state: () => ({
 		running: false,
 		cycleLength: 2 * 60 * 1000,
+		cycleCount: 1,
 		events: [] as CprEvent[]
 	}),
 	getters: {
@@ -27,6 +28,7 @@ export const useCprStore = defineStore({
 		},
 		cycle() {
 			this.addNewEvent(CprEventType.Cycle);
+			this.cycleCount++;
 		}
 	}
 });
