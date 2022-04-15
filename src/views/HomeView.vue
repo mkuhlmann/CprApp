@@ -63,7 +63,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 
 <template>
 	<main>
-		<div class="container mx-auto flex flex-col items-center py-10 gap-5">
+		<div class="md:w-1/4 mx-auto flex flex-col items-center py-10 gap-5">
 			<div class="border border-light-600 dark:border-gray-700 text-sm text-center">
 				<div class="border-b border-light-600 dark:border-gray-700 p-1">Epinephrine</div>
 				<div v-if="!epinephrineStopwatch.running.value">--:--</div>
@@ -75,12 +75,14 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 			>{{ cycleStopwatch.formatted.value }}</div>
 			<div class>{{ $t('cycle') }}: {{ cprStore.cycleCount }}, {{ totalStopwatch.formatted.value }}</div>
 
-			<div class="w-full">
+			<div class="w-full" v-if="!cprStore.running">
 				<button
-					v-if="!cprStore.running"
+					
 					v-on:click="start"
 					class="button w-full py-4 bg-green-600 hover:bg-green-500 text-white"
 				>Start</button>
+
+				<img class="w-1/2 mx-auto" src="/logo.svg">
 			</div>
 
 			<div class="w-full" v-if="cprStore.running">
@@ -96,7 +98,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 						{{ $t('cycle') }}
 					</button>
 					<button
-						class="button button-full bg-red-600 hover:bg-red:400 py-4 text-white "
+						class="button button-full bg-red-600 hover:bg-red-400 py-4 text-white "
 						v-on:click="epinephrine()"
 					>
 						<Icon>
@@ -109,7 +111,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 				<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('rhythm') }}</div>
 				<div class="flex gap-3 items-center justify-center flex-col md:flex-row">
 					<button
-						class="button button-full bg-green-600 hover:bg-green:400 text-white"
+						class="button button-full bg-green-600 hover:bg-green-400 text-white"
 						v-on:click="rhythm('pea')"
 					>
 						<Icon>
@@ -118,7 +120,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 						{{ $t('pea') }}
 					</button>
 					<button
-						class="button button-full bg-green-600 hover:bg-green:400 text-white"
+						class="button button-full bg-green-600 hover:bg-green-400 text-white"
 						v-on:click="rhythm('asystole')"
 					>
 						<Icon>
@@ -127,7 +129,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 						{{ $t('asystole') }}
 					</button>
 					<button
-						class="button button-full bg-amber-600 hover:bg-amber:400 text-white"
+						class="button button-full bg-amber-600 hover:bg-amber-400 text-white"
 						v-on:click="rhythm('vt')"
 					>
 						<Icon>
@@ -136,7 +138,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 						{{ $t('vt') }}
 					</button>
 					<button
-						class="button button-full bg-amber-600 hover:bg-amber:400 text-white"
+						class="button button-full bg-amber-600 hover:bg-amber-400 text-white"
 						v-on:click="rhythm('vf')"
 					>
 						<Icon>
