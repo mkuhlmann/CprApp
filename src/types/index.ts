@@ -8,5 +8,6 @@ export enum CprEventType {
 	Start = 'start',
 	End = 'end',
 	Cycle = 'cycle',
-	Medication = 'medication'
+	Medication = 'medication',
+	Rhythm = 'rhythm'
 }

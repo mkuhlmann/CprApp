@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
+import { registerSW } from 'virtual:pwa-register';
 
 import i18nMessages from '@/locales';
 import App from './App.vue'
@@ -8,6 +9,14 @@ import router from './router'
 
 import 'virtual:windi.css';
 import { useNavigatorLanguage } from '@vueuse/core';
+
+
+
+const updateSW = registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {},
+})
+
 
 const i18n = createI18n({
 	locale: useNavigatorLanguage().language.value,
