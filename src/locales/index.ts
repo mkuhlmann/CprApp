@@ -9,7 +9,8 @@ const de = {
 	vf: 'VF',
 	pea: 'PEA',
 	asystole: 'Asystole',
-	type: 'Typ'
+	type: 'Typ',
+	'reversible-causes': 'Reversible Ursachen'
 };
 
 const en = {
@@ -23,7 +24,8 @@ const en = {
 	vf: 'VF',
 	pea: 'PEA',
 	asystole: 'Asystole',
-	type: 'Type'
+	type: 'Type',
+	'reversible-causes': 'Reversible causes'
 };
 
 export default { en, de };

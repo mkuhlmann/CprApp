@@ -1,8 +1,8 @@
-import { CprEventType, type CprEvent, type CrpState } from '@/types';
+import type { CprEvent } from '@/types';
 import { defineStore } from 'pinia';
 
 export const useCprEventStore = defineStore({
-	id: 'event',
+	id: 'cprEvent',
 	state: () => ({
 		events: [] as CprEvent[]
 	}),
@@ -19,10 +19,6 @@ export const useCprEventStore = defineStore({
 				time: Date.now() / 1000 | 0,
 				text
 			});
-		},
-		cycle() {
-			this.addNewEvent(CprEventType.Cycle);
-			this.cycleCount++;
 		}
 	}
 });

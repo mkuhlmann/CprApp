@@ -3,7 +3,7 @@ import type { CprReversibleCause } from '@/types';
 export function useDefaultReversibleCauses() {
 	const hts = ['Hypovolemia', 'Hypoxia', 'Hydrogen ion excess (acidosis)',
 		'Hypoglycemia', 'Hypo-/Hyperkalemia', 'Hypothermia',
-		'Tension pneumothorax', 'Tamponade – Cardiac', 'Toxins',
+		'Tension pneumothorax', 'Tamponade (cardiac)', 'Toxins',
 		'Thrombosis (pulmonary embolus)', 'Thrombosis (myocardial infarction'];
 
 	const defaultHTs : CprReversibleCause[] = [];

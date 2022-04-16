@@ -6,8 +6,9 @@ import dayjs from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration';
 
 import i18nMessages from '@/locales';
-import App from './App.vue'
-import router from './router'
+import App from './App.vue';
+
+import { createRouter, createWebHistory } from 'vue-router';
 
 import 'virtual:windi.css';
 import { useNavigatorLanguage } from '@vueuse/core';
@@ -31,8 +32,19 @@ const i18n = createI18n({
 
 const app = createApp(App)
 
+app.use(createPinia());
 app.use(i18n);
-app.use(createPinia())
-app.use(router)
+
+const router = createRouter({
+	history: createWebHistory(import.meta.env.BASE_URL),
+	routes: [
+		{
+			path: '/',
+			name: 'home',
+			component: () => import('./views/HomeView.vue')
+		}
+	]
+})
+app.use(router);
 
 app.mount('#app')

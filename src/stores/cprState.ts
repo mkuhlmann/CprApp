@@ -6,11 +6,11 @@ import { useCprEventStore } from './cprEvent';
 const cprEventStore = useCprEventStore();
 
 export const useCprStateStore = defineStore({
-	id: 'cpr',
+	id: 'cprState',
 	state: (): CrpState => ({
 		timers: {
 			start: 0,
-			epinpehrine: 0,
+			epinephrine: 0,
 			cycle: 0
 		},
 		cycleLength: 2 * 60 * 1000,
@@ -25,6 +25,7 @@ export const useCprStateStore = defineStore({
 	actions: {
 		cycle() {
 			cprEventStore.addNewEvent(CprEventType.Cycle);
+			this.timers.cycle = Date.now();
 			this.cycleCount++;
 		}
 	}
