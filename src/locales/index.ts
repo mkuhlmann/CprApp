@@ -9,6 +9,7 @@ const de = {
 	vf: 'VF',
 	pea: 'PEA',
 	asystole: 'Asystole',
+	type: 'Typ'
 };
 
 const en = {
@@ -22,6 +23,7 @@ const en = {
 	vf: 'VF',
 	pea: 'PEA',
 	asystole: 'Asystole',
+	type: 'Type'
 };
 
 export default { en, de };

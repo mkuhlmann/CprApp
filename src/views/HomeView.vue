@@ -11,8 +11,10 @@ import { Icon } from '@vicons/utils';
 
 import { CprEventType } from '@/types';
 import { useStopwatch } from '@/composables/stopwatch';
-import { useCprStore } from '@/stores/cpr';
+import { useCprStore } from '@/stores/cprState';
 import BeepMp3 from '@/assets/beep.mp3';
+
+import DurationDisplay from '@/components/DurationDisplay.vue';
 
 const beepSound = new Howl({
 	src: [BeepMp3],
@@ -52,6 +54,11 @@ const rhythm = (rhythm: string) => {
 	cprStore.addNewEvent(CprEventType.Rhythm, rhythm);
 };
 
+const loop = function() {
+	const now = Date.now();
+	
+};
+
 watch(cycleStopwatch.elapsed, (newVal) => {
 	if (!cycleDue.value && cycleStopwatch.elapsed.value > cprStore.cycleLength) {
 		cycleDue.value = true;
@@ -63,17 +70,34 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 
 <template>
 	<main>
-		<div class="md:w-1/4 mx-auto flex flex-col items-center py-10 gap-5">
-			<div class="border border-light-600 dark:border-gray-700 text-sm text-center">
-				<div class="border-b border-light-600 dark:border-gray-700 p-1">Epinephrine</div>
-				<div v-if="!epinephrineStopwatch.running.value">--:--</div>
-				<div v-else>{{ epinephrineStopwatch.formatted.value }}</div>
-			</div>
+		<div class="lg:w-1/2 mx-auto flex flex-col items-center py-10 gap-5">
+			<table class="table text-center">
+				<thead>
+					<tr>
+						<th>{{ $t('epinephrine') }}</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div v-if="!epinephrineStopwatch.running.value">--:--</div>
+							<div v-else><DurationDisplay :duration="epinephrineStopwatch.elapsed.value" format="mm:ss" /></div>
+						</td>
+						<td>
+							<DurationDisplay :duration="totalStopwatch.elapsed.value" format="HH:mm:ss" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
 			<div
-				class="text-5xl font-bold"
+				class="text-8xl font-bold"
 				v-bind:class="{ 'text-red-500': cycleStopwatch.elapsed.value > cprStore.cycleLength }"
-			>{{ cycleStopwatch.formatted.value }}</div>
-			<div class>{{ $t('cycle') }}: {{ cprStore.cycleCount }}, {{ totalStopwatch.formatted.value }}</div>
+			>
+				<DurationDisplay :duration="cycleStopwatch.elapsed.value" format="mm:ss" />
+			</div>
+			<div>{{ $t('cycle') }}: {{ cprStore.cycleCount }}</div>
 
 			<div class="w-full" v-if="!cprStore.running">
 				<button
@@ -83,6 +107,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 				>Start</button>
 
 				<img class="w-1/2 mx-auto" src="/logo.svg">
+				<div class="text-5xl text-center" style="font-family: 'Kaushan Script', 'Monserrat', Verdana, Geneva, Tahoma, sans-serif;">CprApp</div>
 			</div>
 
 			<div class="w-full" v-if="cprStore.running">
@@ -109,7 +134,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 					
 				</div>
 				<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('rhythm') }}</div>
-				<div class="flex gap-3 items-center justify-center flex-col md:flex-row">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row">
 					<button
 						class="button button-full bg-green-600 hover:bg-green-400 text-white"
 						v-on:click="rhythm('pea')"
@@ -149,11 +174,13 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 				</div>
 			</div>
 
+			<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('reversible-causes') }}</div>
+
 			<div class="w-full md:w-auto" v-if="cprStore.running">
 				<table class="table w-full">
 					<thead>
 						<tr>
-							<th>Type</th>
+							<th>{{ $t('type') }}</th>
 							<th></th>
 							<th>Time</th>
 						</tr>
@@ -162,10 +189,16 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 						<tr v-for="event in cprStore.events">
 							<td class="text-sm">{{ $t(event.type) }}</td>
 							<td class="text-sm">{{ event.type == CprEventType.Rhythm ? $t(event.text!) : event.text }}</td>
-							<td class="text-sm">{{ dayjs.unix(event.time).format('HH:mm:ss') }}</td>
+							<td class="text-sm font-mono">{{ dayjs.unix(event.time).format('HH:mm:ss') }}</td>
 						</tr>
 					</tbody>
 				</table>
+			</div>
+
+			<div class="flex items-center gap-2 text-sm opacity-50">
+
+				<img width="32" src="/logo.svg">
+				CprApp v1 &mdash; made with ♡ by Manuel Kuhlmann &mdash; <a href="#">Feedback / Suggestions?</a>
 			</div>
 		</div>
 	</main>
@@ -177,7 +210,7 @@ watch(cycleStopwatch.elapsed, (newVal) => {
 }
 
 .button-full {
-	@apply w-full md:w-auto ;
+	@apply w-full;
 }
 
 

@@ -1,21 +1,15 @@
-import { CprEventType, type CprEvent } from '@/types';
+import { CprEventType, type CprEvent, type CrpState } from '@/types';
 import { defineStore } from 'pinia';
 
-export const useCprStore = defineStore({
-	id: 'cpr',
+export const useCprEventStore = defineStore({
+	id: 'event',
 	state: () => ({
-		running: false,
-		cycleLength: 2 * 60 * 1000,
-		cycleCount: 1,
 		events: [] as CprEvent[]
 	}),
 	getters: {
 
 	},
 	actions: {
-		start() {
-			this.running = true;
-		},
 		addEvent(event: CprEvent) {
 			this.events.push(event);
 		},
