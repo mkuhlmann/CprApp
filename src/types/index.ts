@@ -23,6 +23,7 @@ export enum CprEventType {
 	SetStart = 'set-start',
 	End = 'end',
 	Cycle = 'cycle',
+	Shock = 'shock',
 	Medication = 'medication',
 	Rhythm = 'rhythm',
 	RuleIn = 'rule-in',
