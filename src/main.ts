@@ -10,6 +10,7 @@ import App from './App.vue';
 
 import { createRouter, createWebHistory } from 'vue-router';
 
+import './assets/base.css';
 import 'virtual:windi.css';
 import { useNavigatorLanguage } from '@vueuse/core';
 

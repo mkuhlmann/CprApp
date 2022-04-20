@@ -23,5 +23,9 @@ onMounted(() => {
 body {
     font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
+
+.link {
+	@apply underline underline-dotted hover:underline-solid;
+}
     
 </style>

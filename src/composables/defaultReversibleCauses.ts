@@ -4,7 +4,7 @@ export function useDefaultReversibleCauses() {
 	const hts = ['Hypovolemia', 'Hypoxia', 'Hydrogen ion excess (acidosis)',
 		'Hypoglycemia', 'Hypo-/Hyperkalemia', 'Hypothermia',
 		'Tension pneumothorax', 'Tamponade (cardiac)', 'Toxins',
-		'Thrombosis (pulmonary embolus)', 'Thrombosis (myocardial infarction'];
+		'Thrombosis (pulmonary embolus)', 'Thrombosis (myocardial infarction)'];
 
 	const defaultHTs : CprReversibleCause[] = [];
 
