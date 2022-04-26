@@ -20,6 +20,7 @@ export default defineConfig({
 		include: path.resolve(__dirname, './src/locales/**'),
 	}),
 	VitePWA({
+		registerType: 'autoUpdate',
 		includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
 		manifest: {
 			name: 'CRP App',

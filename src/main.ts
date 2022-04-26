@@ -18,9 +18,13 @@ import { useCprStateStore } from './stores/cprState';
 dayjs.extend(dayjsDuration);
 
 const updateSW = registerSW({
-  onNeedRefresh() {},
-  onOfflineReady() {},
-})
+	onNeedRefresh() {
+		
+	},
+	onOfflineReady() {
+
+	},
+});
 
 
 const i18n = createI18n({
@@ -47,7 +51,7 @@ const router = createRouter({
 		},
 		{
 			path: '/:id',
-			name:'cpr',
+			name: 'cpr',
 			component: () => import('./views/CprView.vue')
 		}
 	]
@@ -56,7 +60,7 @@ app.use(router);
 
 const cprStateStore = useCprStateStore();
 
-if(cprStateStore.running) {
+if (cprStateStore.running) {
 	router.push('/' + cprStateStore.state.id);
 } else {
 	router.push('/');
