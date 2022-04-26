@@ -23,10 +23,11 @@ export default defineConfig({
 		registerType: 'autoUpdate',
 		includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
 		manifest: {
-			name: 'CRP App',
-			short_name: 'CPR App',
-			description: 'Description of your app',
+			name: 'CRP Timer',
+			short_name: 'CPR Timer',
+			description: 'CPR Timer supports medical professionals during during cardiopulmonary resuscitation (CPR) and advanced life support (ALS).',
 			theme_color: '#7f1d1d',
+			start_url: '/',
 			icons: [
 				{
 					src: 'pwa-192x192.png',

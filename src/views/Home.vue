@@ -8,7 +8,7 @@ const cprStateStore = useCprStateStore();
 
 const start = function () {
 	cprStateStore.start();
-	router.push('/' + cprStateStore.state.id);
+	router.replace('/' + cprStateStore.state.id);
 };
 </script>
 
