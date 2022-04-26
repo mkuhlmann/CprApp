@@ -3,7 +3,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 import WindiCSS from 'vite-plugin-windicss';
 
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue';
+import vueI18n from '@intlify/vite-plugin-vue-i18n';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +16,9 @@ export default defineConfig({
 			host: 'dde-3000.pve.mkuhlmann.org'
 		}*/
 	},
-	plugins: [vue(),
+	plugins: [vue(), vueI18n({
+		include: path.resolve(__dirname, './src/locales/**'),
+	}),
 	VitePWA({
 		includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
 		manifest: {

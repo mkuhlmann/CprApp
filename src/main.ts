@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register';
 import dayjs from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration';
 
-import i18nMessages from '@/locales';
+import i18nMessages from '@intlify/vite-plugin-vue-i18n/messages';
 import App from './App.vue';
 
 import { createRouter, createWebHistory } from 'vue-router';
@@ -13,6 +13,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import './assets/base.css';
 import 'virtual:windi.css';
 import { useNavigatorLanguage } from '@vueuse/core';
+import { useCprStateStore } from './stores/cprState';
 
 dayjs.extend(dayjsDuration);
 
@@ -42,10 +43,23 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'home',
+			component: () => import('./views/Home.vue')
+		},
+		{
+			path: '/:id',
+			name:'cpr',
 			component: () => import('./views/CprView.vue')
 		}
 	]
 })
 app.use(router);
 
-app.mount('#app')
+const cprStateStore = useCprStateStore();
+
+if(cprStateStore.running) {
+	router.push('/' + cprStateStore.state.id);
+} else {
+	router.push('/');
+}
+
+app.mount('#app');

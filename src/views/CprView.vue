@@ -17,11 +17,16 @@ import BeepMp3 from '@/assets/beep.mp3';
 import DurationDisplay from '@/components/DurationDisplay.vue';
 import ReversibleCause from '@/components/ReversibleCause.vue';
 import { useTitle } from '@vueuse/core';
+import Footer from '../components/Footer.vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 const beepSound = new Howl({
 	src: [BeepMp3],
 	loop: false
 });
+const { t } = useI18n();
+const router = useRouter();
 const documentTitle = useTitle();
 
 const cprStateStore = useCprStateStore();
@@ -32,29 +37,23 @@ const durations = reactive<Record<string, number>>({});
 
 const uiLocked = ref(false);
 
-const lockUi = function() {
+const lockUi = function () {
 	uiLocked.value = true;
 	setTimeout(() => {
 		uiLocked.value = false;
 	}, 5000);
 };
 
-const start = () => {
-	cprEventStore.addNewEvent(CprEventType.Start);
-	cprStateStore.timers.start = Date.now();
-	cprStateStore.timers.cycle = Date.now();
-	startLoop();
-};
-
 const cycle = () => {
 	cycleDue.value = false;
+	cprEventStore.addNewEvent(CprEventType.Cycle);
 	cprStateStore.cycle();
 	lockUi();
 	loop();
 };
 
 const epinephrine = () => {
-	cprStateStore.timers.epinephrine = Date.now();
+	cprStateStore.state.timers.epinephrine = Date.now();
 	cprEventStore.addNewEvent(CprEventType.Medication, 'Epinephrine 1 mg');
 	loop();
 };
@@ -74,10 +73,18 @@ const shock = () => {
 
 const rosc = () => {
 	rhythm('rosc');
-	
-}
+};
 
-const disableButton = function(event: MouseEvent) {
+const stop = (skipOverview: boolean = false) => {
+	cprEventStore.addNewEvent(CprEventType.End);
+	if(skipOverview && confirm(t('stop-without-save-confirm'))) {
+		cprStateStore.reset();
+		cprEventStore.reset();
+		router.push('/');
+	}
+};
+
+const disableButton = function (event: MouseEvent) {
 	let el = event.currentTarget as HTMLElement;
 	el.setAttribute('disabled', '');
 	setTimeout(() => {
@@ -85,7 +92,7 @@ const disableButton = function(event: MouseEvent) {
 	}, 3000);
 };
 
-const startLoop = function() {
+const startLoop = function () {
 	const interval = setInterval(() => {
 		loop();
 	}, 1000);
@@ -93,24 +100,26 @@ const startLoop = function() {
 
 const loop = function () {
 	const now = Date.now();
-	for (let timer in cprStateStore.timers) {
-		if (cprStateStore.timers[timer] <= 0) {
+
+	for (let timer in cprStateStore.state.timers) {
+		if (cprStateStore.state.timers[timer] <= 0) {
 			durations[timer] = -1;
 		} else {
-			durations[timer] = now - cprStateStore.timers[timer];
+			durations[timer] = now - cprStateStore.state.timers[timer];
 		}
 	}
 
 	if (durations.cycle > 0) {
-		documentTitle.value = `CPR Timer - ${dayjs.duration(durations.cycle).format('mm:ss')} (${cprStateStore.cycleCount})`;
+		documentTitle.value = `CPR Timer - ${dayjs.duration(durations.cycle).format('mm:ss')} (${cprStateStore.state.cycleCount})`;
 	}
 
-	if (!cycleDue.value && durations.cycle > cprStateStore.cycleLength) {
+	if (!cycleDue.value && durations.cycle > cprStateStore.state.cycleLength) {
 		cycleDue.value = true;
 		beepSound.play();
 	}
 };
 
+startLoop();
 loop();
 
 
@@ -142,102 +151,64 @@ loop();
 				<DurationDisplay :duration="durations.cycle" format="mm:ss" />
 			</div>
 
-			<div class="w-full" v-if="!cprStateStore.running">
-				<button
-					v-on:click="start"
-					class="button w-full py-4 bg-green-600 hover:bg-green-500 text-white"
-				>Start</button>
-			</div>
-
 			<div class="w-full" v-if="cprStateStore.running">
-				<div
-					class="flex justify-center mt-3 mb-1 uppercase font-semibold"
-				>{{ $t('cycle') }}: {{ cprStateStore.cycleCount }}</div>
+				<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('cycle') }}: {{ cprStateStore.state.cycleCount }}</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row">
-					<button
-						class="button button-full bg-blue-600 hover:bg-blue-400 py-4 text-white"
-						v-on:click="cycle(); disableButton($event);"
-					>
+					<button class="button button-full bg-blue-600 hover:bg-blue-400 py-4 text-white" v-on:click="cycle(); disableButton($event);">
 						<Icon>
 							<CycleIcon />
 						</Icon>
 						{{ $t('cycle') }}
 					</button>
-					<button
-						class="button button-full bg-red-600 hover:bg-red-400 py-4 text-white"
-						v-on:click="epinephrine(); disableButton($event);"
-					>
+					<button class="button button-full bg-red-600 hover:bg-red-400 py-4 text-white" v-on:click="epinephrine(); disableButton($event);">
 						<Icon>
 							<SyringeIcon />
 						</Icon>
 						{{ $t('epinephrine') }}
 					</button>
 
-					<button
-						class="button button-full bg-violet-600 hover:bg-violet-400 py-4 text-white"
-						v-on:click="shock(); disableButton($event);"
-					>
+					<button class="button button-full bg-violet-600 hover:bg-violet-400 py-4 text-white" v-on:click="shock(); disableButton($event);">
 						<Icon>
 							<ShockIcon />
 						</Icon>
 						{{ $t('shock') }}
 					</button>
-					<button
-						class="button button-full bg-red-600 hover:bg-red-400 py-4 text-white"
-						v-on:click="amiodarone(); disableButton($event);"
-					>
+					<button class="button button-full bg-red-600 hover:bg-red-400 py-4 text-white" v-on:click="amiodarone(); disableButton($event);">
 						<Icon>
 							<SyringeIcon />
 						</Icon>
 						{{ $t('amiodarone') }}
 					</button>
-					
+
 				</div>
 				<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('rhythm') }}</div>
-				<div
-					class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row"
-				>
-					<button
-						class="button button-full bg-green-600 hover:bg-green-400 text-white"
-						v-on:click="rhythm('pea'); disableButton($event);"
-					>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row">
+					<button class="button button-full bg-green-600 hover:bg-green-400 text-white" v-on:click="rhythm('pea'); disableButton($event);">
 						<Icon>
 							<HeartPulseIcon />
 						</Icon>
 						{{ $t('pea') }}
 					</button>
-					<button
-						class="button button-full bg-green-600 hover:bg-green-400 text-white"
-						v-on:click="rhythm('asystole'); disableButton($event);"
-					>
+					<button class="button button-full bg-green-600 hover:bg-green-400 text-white" v-on:click="rhythm('asystole'); disableButton($event);">
 						<Icon>
 							<HeartPulseIcon />
 						</Icon>
 						{{ $t('asystole') }}
 					</button>
-					<button
-						class="button button-full bg-amber-600 hover:bg-amber-400 text-white"
-						v-on:click="rhythm('vt'); disableButton($event);"
-					>
+					<button class="button button-full bg-amber-600 hover:bg-amber-400 text-white" v-on:click="rhythm('vt'); disableButton($event);">
 						<Icon>
 							<HeartPulseIcon />
 						</Icon>
 						{{ $t('vt') }}
 					</button>
-					<button
-						class="button button-full bg-amber-600 hover:bg-amber-400 text-white"
-						v-on:click="rhythm('vf'); disableButton($event);"
-					>
+					<button class="button button-full bg-amber-600 hover:bg-amber-400 text-white" v-on:click="rhythm('vf'); disableButton($event);">
 						<Icon>
 							<HeartPulseIcon />
 						</Icon>
 						{{ $t('vf') }}
 					</button>
 				</div>
-				<button
-						class="mt-3 button button-full  bg-blue-600 hover:bg-blue-400 text-white"
-						v-on:click="rosc(); disableButton($event);"
-					>
+				<button class="mt-3 button button-full  bg-blue-600 hover:bg-blue-400 text-white" v-on:click="rosc(); disableButton($event);">
 					<Icon>
 						<HeartPulseIcon />
 					</Icon>
@@ -248,16 +219,10 @@ loop();
 
 				<div class="md:flex">
 					<div class="md:flex-1">
-						<ReversibleCause
-							v-for="reversibleCause in cprStateStore.reversibleCauses.filter(e => e.name.startsWith('H'))"
-							:reversible-cause="reversibleCause"
-						/>
+						<ReversibleCause v-for="reversibleCause in cprStateStore.state.reversibleCauses.filter(e => e.name.startsWith('H'))" :reversible-cause="reversibleCause" />
 					</div>
 					<div class="md:flex-1">
-						<ReversibleCause
-							v-for="reversibleCause in cprStateStore.reversibleCauses.filter(e => e.name.startsWith('T'))"
-							:reversible-cause="reversibleCause"
-						/>
+						<ReversibleCause v-for="reversibleCause in cprStateStore.state.reversibleCauses.filter(e => e.name.startsWith('T'))" :reversible-cause="reversibleCause" />
 					</div>
 				</div>
 
@@ -283,37 +248,27 @@ loop();
 				</table>
 			</div>
 
-			<div class="flex items-center gap-2 text-sm opacity-50 flex-col md:flex-row">
-				<div class="flex items-center">
-					<img width="32" src="/logo.svg" /> CprApp
-				</div>
-				<div class="hidden md:block">&mdash;</div>
-				<div>
-					made with ♡ by <a class="link" href="https://mkuhlmann.org" target="_blank">Manuel Kuhlmann</a>
-				</div>
-
-				<div class="hidden md:block">&mdash;</div>
-				<a href="#" class="link">Feedback / Suggestions?</a>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row">
+				<button class="button button-full bg-gray-600 hover:bg-gray-800 text-white text-sm" v-on:click="stop(true)">
+					<Icon>
+						<HeartPulseIcon />
+					</Icon>
+					{{ $t('stop-without-save') }}
+				</button>
 			</div>
+
+			<Footer />
 		</div>
 	</main>
 </template>
 
 <style>
-.button {
-	@apply disabled:cursor-not-allowed px-4 py-2 transition-colors disabled:bg-blue-gray-500;
-}
-
-.button-full {
-	@apply w-full;
-}
-
 .reversible-cause:nth-child(even) {
-	@apply bg-gray-100 dark:bg-gray-700;
+	@apply bg-gray-100 dark: bg-gray-700;
 }
 
 .table {
-	@apply border border-light-600 dark:border-gray-700;
+	@apply border border-light-600 dark: border-gray-700;
 }
 
 .table thead {
@@ -321,7 +276,7 @@ loop();
 }
 
 .table tr:nth-child(even) {
-	@apply bg-gray-100 dark:bg-gray-700;
+	@apply bg-gray-100 dark: bg-gray-700;
 }
 
 .table td,

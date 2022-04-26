@@ -1,8 +1,10 @@
-export type CrpState = {
+export type CprState = {
+	id: string,
 	timers: Record<string, number>, // cycle, epinephrine, start
 	reversibleCauses: CprReversibleCause[],
 	cycleLength: number,
-	cycleCount: number
+	cycleCount: number,
+	running: boolean
 };
 
 export type CprReversibleCause = {

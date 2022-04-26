@@ -55,3 +55,12 @@
   font-weight: 600;
   src: url('./fonts/montserrat-v23-latin-600italic.woff2') format('woff2');
 }
+
+
+.button {
+	@apply disabled:cursor-not-allowed px-4 py-2 transition-colors disabled:bg-blue-gray-500;
+}
+
+.button-full {
+	@apply w-full;
+}
