@@ -61,9 +61,9 @@ app.use(router);
 const cprStateStore = useCprStateStore();
 
 if (cprStateStore.running) {
-	router.push('/' + cprStateStore.state.id);
+	router.replace('/' + cprStateStore.state.id);
 } else {
-	router.push('/');
+	router.replace('/');
 }
 
 app.mount('#app');

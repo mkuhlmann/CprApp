@@ -80,7 +80,7 @@ const stop = (skipOverview: boolean = false) => {
 	if(skipOverview && confirm(t('stop-without-save-confirm'))) {
 		cprStateStore.reset();
 		cprEventStore.reset();
-		router.push('/');
+		router.replace('/');
 	}
 };
 

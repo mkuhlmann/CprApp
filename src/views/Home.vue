@@ -16,7 +16,7 @@ const start = function () {
 	<div class="lg:w-1/2 mx-auto flex flex-col items-center py-10 gap-5">
 
 		<div>
-			<img src="/logo.svg" width="512" alt="CPR App Logo" />
+			<img src="/logo.svg" width="400" height="400" alt="CPR App Logo" />
 		</div>
 
 		<div class="w-full">

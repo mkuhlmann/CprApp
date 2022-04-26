@@ -1,7 +1,7 @@
 <template>
 	<div class="flex items-center gap-2 text-sm opacity-50 flex-col md:flex-row">
 		<div class="flex items-center">
-			<img width="32" src="/logo.svg" /> CprApp
+			<img width="32" height="32" src="/logo.svg" /> CprApp
 		</div>
 		<div class="hidden md:block">&mdash;</div>
 		<div>
