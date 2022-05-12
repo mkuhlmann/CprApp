@@ -34,7 +34,7 @@
     "features.protocol": "Klar strukturierte Berichte mit einem detaillierten Protokoll aller durchgeführten Maßnahmen ohne personenbezogene Daten.",
 	"features.hts": "H&Ts - Liste möglicher reversibler Ursachen für die Notfallbedingungen.",
     "features.rhythm": "Rhythmuskontrolle: VT / VF / PEA / Asystole / ROSC.",
-    "stop-without-save": "Timer beenden",
+    "stop-without-save": "Timer zurücksetzen",
     "stop-without-save-confirm": "Soll der Timer wirklich beendet werden? Die Daten werden nicht gespeichert.",
     "stop-and-save": "Reanimation beenden und zum Überblick"
 }

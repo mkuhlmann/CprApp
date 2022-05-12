@@ -60,6 +60,7 @@ export const useCprStateStore = defineStore('cprState', () => {
 			epinephrine: 0,
 			cycle: 0
 		};
+		state.value.reversibleCauses = useDefaultReversibleCauses();
 		state.value.cycleCount = 1;
 		state.value.id = '';
 	};

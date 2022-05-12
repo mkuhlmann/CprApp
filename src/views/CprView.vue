@@ -78,6 +78,7 @@ const rosc = () => {
 const stop = (skipOverview: boolean = false) => {
 	cprEventStore.addNewEvent(CprEventType.End);
 	if(skipOverview && confirm(t('stop-without-save-confirm'))) {
+		documentTitle.value = 'CPR Timer App';
 		cprStateStore.reset();
 		cprEventStore.reset();
 		router.replace('/');
