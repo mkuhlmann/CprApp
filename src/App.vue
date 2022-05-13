@@ -2,6 +2,7 @@
 import { useDark, useWakeLock } from '@vueuse/core';
 import { onMounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
+import { useAnalytics } from './composables/analytics';
 
 const isDark = useDark({
 	selector: 'html',
@@ -11,6 +12,7 @@ const wakeLock = useWakeLock();
 
 onMounted(() => {
 	wakeLock.request('screen').then();
+	useAnalytics();
 });
 
 </script>
