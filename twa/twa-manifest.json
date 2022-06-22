@@ -1,0 +1,39 @@
+{
+  "packageId": "org.mkuhlmann.cpr",
+  "host": "cpr.mkuhlmann.org",
+  "name": "CRP App",
+  "launcherName": "CPR App",
+  "display": "standalone",
+  "themeColor": "#7F1D1D",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#7F1D1D",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://cpr.mkuhlmann.org/twa-512x512.png",
+  "maskableIconUrl": "https://cpr.mkuhlmann.org/twa-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://cpr.mkuhlmann.org/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1"
+}
