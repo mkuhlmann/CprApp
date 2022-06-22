@@ -36,5 +36,6 @@
 	"features.timer": "Independent timers including current cylce, epinephrine and total duration.",
     "features.protocol": "Clearly structured reports including a detailed log of all actions taken without any personal data.",
 	"features.hts": "H&Ts - Chcklist of possible reversible causes of the emergency conditions.",
-	"features.rhythm": "Rhythm check: VT / VF / PEA / Asystole / ROSC."
+	"features.rhythm": "Rhythm check: VT / VF / PEA / Asystole / ROSC.",
+	"restart": "Restart"
 }

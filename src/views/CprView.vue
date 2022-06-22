@@ -72,12 +72,19 @@ const shock = () => {
 };
 
 const rosc = () => {
-	rhythm('rosc');
+	rhythm('ROSC');
+	cprEventStore.addNewEvent(CprEventType.End, `${dayjs.duration(durations.start).format('mm:ss')} `);
+	cprStateStore.end();
+	loop();
+};
+
+const restart = () => {
+	cprStateStore.start();
 };
 
 const stop = (skipOverview: boolean = false) => {
 	cprEventStore.addNewEvent(CprEventType.End);
-	if(skipOverview && confirm(t('stop-without-save-confirm'))) {
+	if (skipOverview && confirm(t('stop-without-save-confirm'))) {
 		documentTitle.value = 'CPR Timer App';
 		cprStateStore.reset();
 		cprEventStore.reset();
@@ -96,7 +103,7 @@ const disableButton = function (event: MouseEvent) {
 const startLoop = function () {
 	const interval = setInterval(() => {
 		loop();
-	}, 1000);
+	}, 500);
 };
 
 const loop = function () {
@@ -152,7 +159,7 @@ loop();
 				<DurationDisplay :duration="durations.cycle" format="mm:ss" />
 			</div>
 
-			<div class="w-full" v-if="cprStateStore.running">
+			<div class="w-full" v-if="cprStateStore.state.timers.start > 0">
 				<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('cycle') }}: {{ cprStateStore.state.cycleCount }}</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row">
 					<button class="button button-full bg-blue-600 hover:bg-blue-400 py-4 text-white" v-on:click="cycle(); disableButton($event);">
@@ -215,6 +222,11 @@ loop();
 					</Icon>
 					{{ $t('rosc') }}
 				</button>
+			</div>
+			<div class="w-full" v-else>
+				<button v-on:click="restart" class="button w-full py-4 bg-green-600 hover:bg-green-500 text-white">{{ $t('restart') }}</button>
+			</div>
+			<div class="w-full">
 
 				<div class="flex justify-center mt-3 mb-1 uppercase font-semibold">{{ $t('reversible-causes') }}</div>
 
@@ -248,6 +260,7 @@ loop();
 					</tbody>
 				</table>
 			</div>
+
 
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center justify-center flex-col md:flex-row">
 				<button class="button button-full bg-gray-600 hover:bg-gray-800 text-white text-sm" v-on:click="stop(true)">

@@ -36,5 +36,6 @@
     "features.rhythm": "Rhythmuskontrolle: VT / VF / PEA / Asystole / ROSC.",
     "stop-without-save": "Timer zurücksetzen",
     "stop-without-save-confirm": "Soll der Timer wirklich beendet werden? Die Daten werden nicht gespeichert.",
-    "stop-and-save": "Reanimation beenden und zum Überblick"
+    "stop-and-save": "Reanimation beenden und zum Überblick",
+    "restart": "Neu starten"
 }

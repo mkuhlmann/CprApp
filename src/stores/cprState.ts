@@ -43,10 +43,8 @@ export const useCprStateStore = defineStore('cprState', () => {
 	};
 
 	const start = () => {
-		reset();
-		cprEventStore.reset();
-
-		state.value.id = generateId();
+		if(!state.value.id)
+			state.value.id = generateId();
 		state.value.running = true;
 
 		cprEventStore.addNewEvent(CprEventType.Start);
@@ -54,14 +52,18 @@ export const useCprStateStore = defineStore('cprState', () => {
 		state.value.timers.cycle = Date.now();
 	};
 
-	const reset = () => {
+	const end = () => {
 		state.value.timers = {
 			start: 0,
 			epinephrine: 0,
 			cycle: 0
 		};
-		state.value.reversibleCauses = useDefaultReversibleCauses();
 		state.value.cycleCount = 1;
+	}
+
+	const reset = () => {
+		end();
+		state.value.reversibleCauses = useDefaultReversibleCauses();
 		state.value.id = '';
 	};
 
@@ -70,7 +72,8 @@ export const useCprStateStore = defineStore('cprState', () => {
 		start,
 		running,
 		cycle,
-		reset
+		reset,
+		end
 	}
 });
 
